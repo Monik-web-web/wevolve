@@ -434,6 +434,14 @@ footer p {
 </section>
 
 
+<section class="sections" id="announcements" style="display:none;">
+  <div class="section-heading">
+    <p class="eyebrow">NEWS FROM THE WEVOLVE TEAM</p>
+    <h2>Announcements</h2>
+  </div>
+  <div id="wevolve-announcement-list"></div>
+</section>
+
 <section class="sections" id="library">
   <div class="section-heading">
     <p class="eyebrow">KNOWLEDGE • UNDERSTANDING • GROWTH</p>
@@ -467,6 +475,9 @@ footer p {
       <p>Explore self-awareness, habits, motivation and the process of meaningful change.</p>
     </article>
   </div>
+
+  <h3 id="wevolve-library-heading" style="display:none;margin-top:45px;font-family:Georgia,serif;color:#183D32;font-weight:normal;font-size:28px;">Latest articles</h3>
+  <div class="cards" id="wevolve-library-articles"></div>
 
   <p class="small-note">Knowledge begins with curiosity. Every article should encourage reflection, critical thinking and informed understanding.</p>
 </section>
@@ -598,16 +609,17 @@ footer p {
 
     <div class="owner-dashboard-menu">
         <h3>Community Management</h3>
-        <button type="button">Member Management</button>
+        <button type="button" id="wevolve-members-btn">Member Management</button>
         <button type="button" id="wevolve-messages-btn">Member Messages</button>
-        <button type="button">Community Reports</button>
+        <button type="button" id="wevolve-reports-btn">Community Reports</button>
 
         <h3>Content Management</h3>
-        <button type="button">Manage Mind Library</button>
-        <button type="button">Publish Announcements</button>
+        <button type="button" id="wevolve-library-btn">Manage Mind Library</button>
+        <button type="button" id="wevolve-unspoken-btn">Moderate The Unspoken</button>
+        <button type="button" id="wevolve-announce-btn">Publish Announcements</button>
 
         <h3>Platform Management</h3>
-        <button type="button">Website Settings</button>
+        <button type="button" id="wevolve-settings-btn">Website Settings</button>
         <button type="button" id="wevolve-overview-btn">Community Overview</button>
     </div>
 
@@ -643,7 +655,36 @@ footer p {
             <button type="submit" id="wevolve-member-submit">Log In</button>
         </form>
 
+        <p style="font-size:14px;"><a href="#" id="wevolve-forgot-link">Forgot your password?</a> Type your email address above, then click this link.</p>
+
         <p id="wevolve-member-message" aria-live="polite"></p>
+    </div>
+
+    <div id="member-reset" class="account-box" style="display: none;">
+        <h3>Set a new password</h3>
+        <p>Choose a new password for your WEVOLVE account.</p>
+
+        <form id="wevolve-reset-form">
+            <input
+                type="password"
+                id="wevolve-new-password"
+                placeholder="New password (at least 8 characters)"
+                autocomplete="new-password"
+                required
+            >
+
+            <input
+                type="password"
+                id="wevolve-new-password-confirm"
+                placeholder="Confirm your new password"
+                autocomplete="new-password"
+                required
+            >
+
+            <button type="submit" id="wevolve-reset-submit">Save new password</button>
+        </form>
+
+        <p id="wevolve-reset-message" aria-live="polite"></p>
     </div>
 
     <div id="member-space" class="account-box" style="display: none;">
@@ -653,7 +694,8 @@ footer p {
         <div id="wevolve-member-notice" aria-live="polite"></div>
 
         <h4 style="margin-top:20px;">Message the WEVOLVE team</h4>
-        <p style="font-size:14px;"><strong>Please note:</strong> WEVOLVE is not an emergency service and does not replace professional care. If you are in immediate danger or may harm yourself, contact your local emergency services or someone you trust right now.</p>
+        <p class="wevolve-crisis-text" style="font-size:14px;white-space:pre-wrap;">WEVOLVE is not an emergency service and does not replace professional care. If you are in immediate danger or may harm yourself, contact your local emergency services or someone you trust right now. In Rwanda, the Rwanda Biomedical Centre mental health call centre can be reached on 114 (Monday to Saturday).</p>
+        <p class="wevolve-privacy-text" style="font-size:14px;white-space:pre-wrap;">Your messages to the WEVOLVE team are private: only you and the WEVOLVE administrator can read them. Your email address is never shown to other members. Expressions shared in The Unspoken appear without any name and only after the team has reviewed them. If you want to stay anonymous, please avoid sharing details that could identify you or other people.</p>
 
         <div id="wevolve-member-thread" aria-live="polite"></div>
 
@@ -838,7 +880,7 @@ footer p {
 
   <h3 style="color:#183d32;">What would you like to express?</h3>
 
-  <form onsubmit="event.preventDefault(); alert('Thank you for expressing yourself. This is a demonstration: your words have not been sent or saved.');">
+  <form id="wevolve-unspoken-form">
     <label for="category">Choose a category</label>
     <select id="category" required style="display:block;width:100%;padding:12px;margin:10px 0 20px;">
       <option value="">Select a category</option>
@@ -855,7 +897,9 @@ footer p {
     <button type="submit" style="background:#183d32;color:white;padding:13px 24px;border:0;border-radius:6px;cursor:pointer;">Submit your expression</button>
   </form>
 
-  <p style="font-size:13px;color:#666;margin-top:18px;">Privacy matters. This is currently a demonstration. Your submission is not stored, published or sent to anyone.</p>
+  <p id="wevolve-unspoken-status" aria-live="polite" style="font-weight:bold;color:#183d32;"></p>
+
+  <p style="font-size:13px;color:#666;margin-top:18px;">Privacy matters. Only logged-in members can share. Every expression is reviewed by the WEVOLVE team before it is shown, and it never shows your name or email.</p>
     
 <div style="margin-top:40px;border-top:1px solid #d9cdbd;padding-top:25px;">
   <h2 style="color:#183d32;">Community Reflections</h2>
@@ -879,7 +923,10 @@ footer p {
     <small>WEVOLVE Reflection · Editorial example</small>
   </div>
 
-  <p style="font-size:13px;color:#666;">These are original editorial examples, not real member submissions. Community contributions will require moderation before publication.</p>
+  <h3 id="wevolve-unspoken-public-heading" style="display:none;color:#183d32;margin-top:30px;">Shared by members</h3>
+  <div id="wevolve-unspoken-public"></div>
+
+  <p style="font-size:13px;color:#666;">The three reflections marked "Editorial example" are original examples written by WEVOLVE. Expressions shared by members appear only after review, and without any name.</p>
 </div>
 
 </div>
@@ -897,6 +944,11 @@ footer p {
         replace professional mental health treatment
         or emergency services.
     </p>
+
+    <p class="wevolve-crisis-text" style="margin-top:25px;font-weight:bold;white-space:pre-wrap;">WEVOLVE is not an emergency service and does not replace professional care. If you are in immediate danger or may harm yourself, contact your local emergency services or someone you trust right now. In Rwanda, the Rwanda Biomedical Centre mental health call centre can be reached on 114 (Monday to Saturday).</p>
+
+    <h3 style="margin:35px 0 10px;font-family:Georgia,serif;color:#183D32;font-weight:normal;font-size:26px;">Your privacy</h3>
+    <p class="wevolve-privacy-text" style="white-space:pre-wrap;">Your messages to the WEVOLVE team are private: only you and the WEVOLVE administrator can read them. Your email address is never shown to other members. Expressions shared in The Unspoken appear without any name and only after the team has reviewed them. If you want to stay anonymous, please avoid sharing details that could identify you or other people.</p>
 </section>
 
 <footer>
@@ -1205,6 +1257,85 @@ async function wevolveMemberLogout() {
     document.getElementById("wevolve-member-message").textContent = "You have signed out.";
 }
 
+/* ---------- FORGOT / RESET PASSWORD ---------- */
+const WEVOLVE_SITE_URL = "https://monik-web-web.github.io/wevolve/";
+
+// True when the member arrived by clicking the link in a password-reset email.
+let wevolveRecoveryMode = window.location.hash.indexOf("type=recovery") !== -1;
+
+function wevolveShowResetBox() {
+    wevolveRecoveryMode = true;
+    document.getElementById("member-login").style.display = "none";
+    document.getElementById("member-space").style.display = "none";
+    document.getElementById("member-reset").style.display = "block";
+}
+
+async function wevolveForgotPassword() {
+    const email = document.getElementById("wevolve-member-email").value.trim();
+    const message = document.getElementById("wevolve-member-message");
+
+    if (!email) {
+        message.textContent = "Please type your email address in the box above, then click 'Forgot your password?' again.";
+        return;
+    }
+
+    message.textContent = "Sending...";
+
+    const { error } = await wevolveSupabase.auth.resetPasswordForEmail(email, {
+        redirectTo: WEVOLVE_SITE_URL
+    });
+
+    if (error) {
+        message.textContent = "Could not send the reset email: " + error.message;
+        return;
+    }
+
+    // The same message is shown whether or not the account exists, to protect member privacy.
+    message.textContent = "If an account exists for that email address, a reset link has been sent. Please check your inbox and spam folder.";
+}
+
+async function wevolveSaveNewPassword() {
+    const password = document.getElementById("wevolve-new-password").value;
+    const confirmPassword = document.getElementById("wevolve-new-password-confirm").value;
+    const message = document.getElementById("wevolve-reset-message");
+    const submit = document.getElementById("wevolve-reset-submit");
+
+    if (password.length < 8) {
+        message.textContent = "Your password must contain at least 8 characters.";
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        message.textContent = "Your passwords do not match.";
+        return;
+    }
+
+    submit.disabled = true;
+    message.textContent = "Saving...";
+
+    try {
+        const { data, error } = await wevolveSupabase.auth.updateUser({ password: password });
+
+        if (error) {
+            message.textContent = "Could not save your new password: " + error.message;
+            return;
+        }
+
+        wevolveRecoveryMode = false;
+        document.getElementById("wevolve-new-password").value = "";
+        document.getElementById("wevolve-new-password-confirm").value = "";
+        document.getElementById("member-reset").style.display = "none";
+        message.textContent = "";
+        history.replaceState(null, "", window.location.pathname);
+        wevolveShowMemberSpace(data.user);
+
+    } catch (err) {
+        message.textContent = "Connection problem: " + err.message;
+    } finally {
+        submit.disabled = false;
+    }
+}
+
 /* ---------- OWNER / ADMINISTRATOR LOGIN ---------- */
 async function wevolveOwnerLogin() {
     const email = document.getElementById("wevolve-owner-email").value.trim();
@@ -1410,6 +1541,583 @@ async function wevolveOpenConversation(memberId, alias) {
         .eq("sender", "member");
 }
 
+/* ---------- SMALL HELPERS FOR BUILDING PAGE ELEMENTS ---------- */
+const WEVOLVE_CARD_CSS = "background:#fff;padding:14px 16px;border-radius:10px;margin:10px 0;";
+const WEVOLVE_FIELD_CSS = "display:block;width:100%;padding:12px;margin:8px 0 14px;border:1px solid #D9CDBD;border-radius:6px;font-size:15px;font-family:inherit;";
+const WEVOLVE_LIBRARY_CATEGORIES = [
+    "Understanding the Mind",
+    "Human Behaviour",
+    "Emotional Intelligence",
+    "Relationships",
+    "Personal Growth"
+];
+
+function wevolveEl(tag, text, css) {
+    const node = document.createElement(tag);
+    if (text) {
+        node.textContent = text;
+    }
+    if (css) {
+        node.style.cssText = css;
+    }
+    return node;
+}
+
+function wevolveAdminPanel() {
+    return document.getElementById("wevolve-admin-panel");
+}
+
+/* ---------- PUBLIC PAGE: SETTINGS, ANNOUNCEMENTS, LIBRARY, THE UNSPOKEN ---------- */
+async function wevolveLoadSettings() {
+    const { data, error } = await wevolveSupabase.from("wevolve_settings").select("key, value");
+
+    if (error || !data) {
+        return;
+    }
+
+    data.forEach(function (row) {
+        let className = null;
+        if (row.key === "crisis_notice") {
+            className = "wevolve-crisis-text";
+        } else if (row.key === "privacy_statement") {
+            className = "wevolve-privacy-text";
+        }
+        if (!className) {
+            return;
+        }
+        document.querySelectorAll("." + className).forEach(function (node) {
+            node.textContent = row.value;
+        });
+    });
+}
+
+async function wevolveLoadAnnouncements() {
+    const section = document.getElementById("announcements");
+    const list = document.getElementById("wevolve-announcement-list");
+
+    const { data, error } = await wevolveSupabase
+        .from("wevolve_announcements")
+        .select("title, body, created_at")
+        .eq("published", true)
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+    if (error || !data || !data.length) {
+        section.style.display = "none";
+        return;
+    }
+
+    list.textContent = "";
+
+    data.forEach(function (item) {
+        const card = wevolveEl("div", "", "background:#F4F0E7;padding:24px;border:1px solid #D9CDBD;margin:15px 0;");
+        card.appendChild(wevolveEl("h3", item.title, "font-family:Georgia,serif;color:#183D32;font-weight:normal;font-size:24px;margin-bottom:8px;"));
+        card.appendChild(wevolveEl("small", new Date(item.created_at).toLocaleDateString(), "color:#666;"));
+        card.appendChild(wevolveEl("p", item.body, "white-space:pre-wrap;line-height:1.8;margin-top:10px;"));
+        list.appendChild(card);
+    });
+
+    section.style.display = "block";
+}
+
+async function wevolveLoadLibrary() {
+    const box = document.getElementById("wevolve-library-articles");
+    const heading = document.getElementById("wevolve-library-heading");
+
+    const { data, error } = await wevolveSupabase
+        .from("wevolve_library_articles")
+        .select("category, title, body, created_at")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+
+    if (error || !data || !data.length) {
+        heading.style.display = "none";
+        box.textContent = "";
+        return;
+    }
+
+    box.textContent = "";
+
+    data.forEach(function (item) {
+        const card = wevolveEl("article", "");
+        card.className = "card";
+        card.appendChild(wevolveEl("small", item.category));
+        card.appendChild(wevolveEl("h3", item.title));
+        card.appendChild(wevolveEl("p", item.body, "white-space:pre-wrap;"));
+        box.appendChild(card);
+    });
+
+    heading.style.display = "block";
+}
+
+async function wevolveLoadUnspokenPublic() {
+    const box = document.getElementById("wevolve-unspoken-public");
+    const heading = document.getElementById("wevolve-unspoken-public-heading");
+
+    const { data, error } = await wevolveSupabase.rpc("wevolve_unspoken_public");
+
+    if (error || !data || !data.length) {
+        heading.style.display = "none";
+        box.textContent = "";
+        return;
+    }
+
+    box.textContent = "";
+
+    data.forEach(function (row) {
+        const card = wevolveEl("div", "", "background:#fff;padding:22px;border-radius:12px;margin:20px 0;");
+        card.appendChild(wevolveEl("h3", row.category, "color:#183d32;"));
+        card.appendChild(wevolveEl("p", row.body, "white-space:pre-wrap;"));
+        card.appendChild(wevolveEl("small", "Shared by a member · " + new Date(row.created_at).toLocaleDateString()));
+
+        const report = wevolveMakeButton("Report", function () {
+            wevolveReportPost(row.id);
+        });
+        report.style.cssText = "margin-left:12px;background:none;border:1px solid #D9CDBD;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#303532;";
+        card.appendChild(report);
+
+        box.appendChild(card);
+    });
+
+    heading.style.display = "block";
+}
+
+async function wevolveSubmitUnspoken() {
+    const category = document.getElementById("category").value;
+    const bodyBox = document.getElementById("expression");
+    const status = document.getElementById("wevolve-unspoken-status");
+    const body = bodyBox.value.trim();
+
+    if (!category || !body) {
+        status.textContent = "Please choose a category and write your expression.";
+        return;
+    }
+
+    const { data } = await wevolveSupabase.auth.getSession();
+
+    if (!data || !data.session) {
+        status.textContent = "Please log in as a member first (see Member Access). Your name is never shown.";
+        return;
+    }
+
+    status.textContent = "Sending...";
+
+    const { error } = await wevolveSupabase
+        .from("wevolve_unspoken")
+        .insert({ member_id: data.session.user.id, category: category, body: body });
+
+    if (error) {
+        status.textContent = "Your expression was not sent: " + error.message;
+        return;
+    }
+
+    bodyBox.value = "";
+    status.textContent = "Thank you. Your expression has been received. It will be reviewed before it is shown, and it will never show your name.";
+}
+
+async function wevolveReportPost(postId) {
+    const { data } = await wevolveSupabase.auth.getSession();
+
+    if (!data || !data.session) {
+        alert("Please log in as a member to report an expression.");
+        return;
+    }
+
+    const reason = window.prompt("Please tell us briefly why you are reporting this expression:");
+
+    if (!reason || !reason.trim()) {
+        return;
+    }
+
+    const { error } = await wevolveSupabase.from("wevolve_reports").insert({
+        reporter_id: data.session.user.id,
+        target_type: "unspoken",
+        target_id: postId,
+        reason: reason.trim().slice(0, 500)
+    });
+
+    if (error) {
+        alert("Your report could not be sent: " + error.message);
+        return;
+    }
+
+    alert("Thank you. Your report has been sent to the WEVOLVE team.");
+}
+
+/* ---------- ADMIN: ANNOUNCEMENTS AND MIND LIBRARY ---------- */
+async function wevolveAdminContent(kind) {
+    const isLibrary = kind === "library";
+    const table = isLibrary ? "wevolve_library_articles" : "wevolve_announcements";
+    const label = isLibrary ? "Mind Library articles" : "Announcements";
+    const panel = wevolveAdminPanel();
+
+    panel.textContent = "Loading...";
+
+    const columns = "id, title, body, published, created_at" + (isLibrary ? ", category" : "");
+    const { data, error } = await wevolveSupabase
+        .from(table)
+        .select(columns)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        panel.textContent = "Could not load " + label + ": " + error.message;
+        return;
+    }
+
+    panel.textContent = "";
+    panel.appendChild(wevolveEl("h3", label, "color:#183D32;"));
+
+    let categoryBox = null;
+    if (isLibrary) {
+        categoryBox = wevolveEl("select", "", WEVOLVE_FIELD_CSS);
+        WEVOLVE_LIBRARY_CATEGORIES.forEach(function (name) {
+            const option = document.createElement("option");
+            option.textContent = name;
+            categoryBox.appendChild(option);
+        });
+        panel.appendChild(categoryBox);
+    }
+
+    const titleBox = wevolveEl("input", "", WEVOLVE_FIELD_CSS);
+    titleBox.type = "text";
+    titleBox.maxLength = 150;
+    titleBox.placeholder = "Title";
+    panel.appendChild(titleBox);
+
+    const bodyBox = wevolveEl("textarea", "", WEVOLVE_FIELD_CSS + "min-height:120px;");
+    bodyBox.maxLength = 3000;
+    bodyBox.placeholder = isLibrary ? "Write the article..." : "Write the announcement...";
+    panel.appendChild(bodyBox);
+
+    const status = wevolveEl("p", "");
+    status.setAttribute("aria-live", "polite");
+
+    panel.appendChild(wevolveMakeButton("Publish", async function () {
+        const title = titleBox.value.trim();
+        const body = bodyBox.value.trim();
+
+        if (!title || !body) {
+            status.textContent = "Please write a title and some text.";
+            return;
+        }
+
+        const row = { title: title, body: body, published: true };
+        if (isLibrary) {
+            row.category = categoryBox.value;
+        }
+
+        const { error: insertError } = await wevolveSupabase.from(table).insert(row);
+
+        if (insertError) {
+            status.textContent = "Could not publish: " + insertError.message;
+            return;
+        }
+
+        wevolveAdminContent(kind);
+    }));
+    panel.appendChild(status);
+
+    (data || []).forEach(function (item) {
+        const card = wevolveEl("div", "", WEVOLVE_CARD_CSS);
+        card.appendChild(wevolveEl("strong", item.title));
+        card.appendChild(wevolveEl(
+            "small",
+            "  " + (isLibrary ? item.category + " · " : "") + new Date(item.created_at).toLocaleDateString() + (item.published ? "" : " · HIDDEN"),
+            "color:#666;"
+        ));
+        card.appendChild(wevolveEl("p", item.body, "white-space:pre-wrap;margin:8px 0;"));
+
+        card.appendChild(wevolveMakeButton(item.published ? "Hide from site" : "Show on site", async function () {
+            const { error: updateError } = await wevolveSupabase
+                .from(table)
+                .update({ published: !item.published })
+                .eq("id", item.id);
+
+            if (updateError) {
+                status.textContent = "Could not update: " + updateError.message;
+                return;
+            }
+            wevolveAdminContent(kind);
+        }));
+
+        card.appendChild(wevolveMakeButton("Delete", async function () {
+            if (!window.confirm("Delete this permanently? This cannot be undone.")) {
+                return;
+            }
+
+            const { error: deleteError } = await wevolveSupabase.from(table).delete().eq("id", item.id);
+
+            if (deleteError) {
+                status.textContent = "Could not delete: " + deleteError.message;
+                return;
+            }
+            wevolveAdminContent(kind);
+        }));
+
+        panel.appendChild(card);
+    });
+}
+
+/* ---------- ADMIN: THE UNSPOKEN (moderation) ---------- */
+async function wevolveAdminUnspoken(filter) {
+    const current = filter || "pending";
+    const panel = wevolveAdminPanel();
+
+    panel.textContent = "Loading...";
+
+    const { data, error } = await wevolveSupabase
+        .from("wevolve_unspoken")
+        .select("id, category, body, status, created_at")
+        .eq("status", current)
+        .order("created_at", { ascending: current === "pending" });
+
+    if (error) {
+        panel.textContent = "Could not load expressions: " + error.message;
+        return;
+    }
+
+    panel.textContent = "";
+    panel.appendChild(wevolveEl("h3", "The Unspoken: moderation", "color:#183D32;"));
+    panel.appendChild(wevolveEl("p", "Members are anonymous here. Approved expressions appear on the website without any name.", "font-size:13px;color:#666;"));
+
+    ["pending", "approved", "rejected"].forEach(function (name) {
+        const tab = wevolveMakeButton(name === current ? "[" + name + "]" : name, function () {
+            wevolveAdminUnspoken(name);
+        });
+        panel.appendChild(tab);
+    });
+
+    const status = wevolveEl("p", "");
+    panel.appendChild(status);
+
+    if (!data || !data.length) {
+        panel.appendChild(wevolveEl("p", "Nothing here."));
+        return;
+    }
+
+    data.forEach(function (item) {
+        const card = wevolveEl("div", "", WEVOLVE_CARD_CSS);
+        card.appendChild(wevolveEl("strong", item.category));
+        card.appendChild(wevolveEl("small", "  " + new Date(item.created_at).toLocaleString(), "color:#666;"));
+        card.appendChild(wevolveEl("p", item.body, "white-space:pre-wrap;margin:8px 0;"));
+
+        function setStatus(newStatus) {
+            return async function () {
+                const { error: updateError } = await wevolveSupabase
+                    .from("wevolve_unspoken")
+                    .update({ status: newStatus })
+                    .eq("id", item.id);
+
+                if (updateError) {
+                    status.textContent = "Could not update: " + updateError.message;
+                    return;
+                }
+                wevolveAdminUnspoken(current);
+            };
+        }
+
+        if (item.status !== "approved") {
+            card.appendChild(wevolveMakeButton("Approve", setStatus("approved")));
+        }
+        if (item.status !== "rejected") {
+            card.appendChild(wevolveMakeButton("Reject", setStatus("rejected")));
+        }
+
+        panel.appendChild(card);
+    });
+}
+
+/* ---------- ADMIN: COMMUNITY REPORTS ---------- */
+async function wevolveAdminReports() {
+    const panel = wevolveAdminPanel();
+    panel.textContent = "Loading reports...";
+
+    const { data, error } = await wevolveSupabase
+        .from("wevolve_reports")
+        .select("id, target_type, target_id, reason, created_at")
+        .eq("status", "open")
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        panel.textContent = "Could not load reports: " + error.message;
+        return;
+    }
+
+    panel.textContent = "";
+    panel.appendChild(wevolveEl("h3", "Community Reports", "color:#183D32;"));
+
+    const status = wevolveEl("p", "");
+    panel.appendChild(status);
+
+    if (!data || !data.length) {
+        panel.appendChild(wevolveEl("p", "No open reports."));
+        return;
+    }
+
+    for (const report of data) {
+        const card = wevolveEl("div", "", WEVOLVE_CARD_CSS);
+        card.appendChild(wevolveEl("strong", "Report"));
+        card.appendChild(wevolveEl("small", "  " + new Date(report.created_at).toLocaleString(), "color:#666;"));
+        card.appendChild(wevolveEl("p", "Reason: " + report.reason, "white-space:pre-wrap;margin:8px 0;"));
+
+        let hasPost = false;
+
+        if (report.target_type === "unspoken" && report.target_id) {
+            const { data: post } = await wevolveSupabase
+                .from("wevolve_unspoken")
+                .select("id, body, status")
+                .eq("id", report.target_id)
+                .maybeSingle();
+
+            if (post) {
+                hasPost = true;
+                card.appendChild(wevolveEl("p", "Reported expression (" + post.status + "): " + post.body, "white-space:pre-wrap;background:#F4F0E7;padding:10px;border-radius:8px;"));
+            } else {
+                card.appendChild(wevolveEl("p", "The reported expression no longer exists."));
+            }
+        }
+
+        card.appendChild(wevolveMakeButton("Mark resolved", async function () {
+            const { error: resolveError } = await wevolveSupabase
+                .from("wevolve_reports")
+                .update({ status: "resolved" })
+                .eq("id", report.id);
+
+            if (resolveError) {
+                status.textContent = "Could not update: " + resolveError.message;
+                return;
+            }
+            wevolveAdminReports();
+        }));
+
+        if (hasPost) {
+            card.appendChild(wevolveMakeButton("Hide expression and resolve", async function () {
+                const { error: hideError } = await wevolveSupabase
+                    .from("wevolve_unspoken")
+                    .update({ status: "rejected" })
+                    .eq("id", report.target_id);
+
+                if (hideError) {
+                    status.textContent = "Could not hide the expression: " + hideError.message;
+                    return;
+                }
+
+                await wevolveSupabase.from("wevolve_reports").update({ status: "resolved" }).eq("id", report.id);
+                wevolveAdminReports();
+            }));
+        }
+
+        panel.appendChild(card);
+    }
+}
+
+/* ---------- ADMIN: MEMBER MANAGEMENT ---------- */
+async function wevolveAdminMembers() {
+    const panel = wevolveAdminPanel();
+    panel.textContent = "Loading members...";
+
+    const { data, error } = await wevolveSupabase.rpc("wevolve_admin_members");
+
+    if (error) {
+        panel.textContent = "Could not load members: " + error.message;
+        return;
+    }
+
+    panel.textContent = "";
+    panel.appendChild(wevolveEl("h3", "Member Management", "color:#183D32;"));
+    panel.appendChild(wevolveEl("p", "Members are shown by alias only. A suspended member cannot send messages, share expressions or file reports.", "font-size:13px;color:#666;"));
+
+    const status = wevolveEl("p", "");
+    panel.appendChild(status);
+
+    if (!data || !data.length) {
+        panel.appendChild(wevolveEl("p", "No members yet."));
+        return;
+    }
+
+    data.forEach(function (row) {
+        const card = wevolveEl("div", "", WEVOLVE_CARD_CSS);
+        card.appendChild(wevolveEl("strong", row.alias));
+        card.appendChild(wevolveEl(
+            "small",
+            "  joined " + new Date(row.joined).toLocaleDateString() +
+                (row.confirmed ? " · email confirmed" : " · email not confirmed") +
+                (row.suspended ? " · SUSPENDED" : ""),
+            "color:#666;"
+        ));
+
+        card.appendChild(wevolveMakeButton(row.suspended ? "Restore" : "Suspend", async function () {
+            if (!row.suspended && !window.confirm("Suspend " + row.alias + "?")) {
+                return;
+            }
+
+            const { error: setError } = await wevolveSupabase.rpc("wevolve_admin_set_suspended", {
+                target: row.user_id,
+                flag: !row.suspended
+            });
+
+            if (setError) {
+                status.textContent = "Could not update: " + setError.message;
+                return;
+            }
+            wevolveAdminMembers();
+        }));
+
+        panel.appendChild(card);
+    });
+}
+
+/* ---------- ADMIN: WEBSITE SETTINGS ---------- */
+async function wevolveAdminSettings() {
+    const panel = wevolveAdminPanel();
+    panel.textContent = "";
+    panel.appendChild(wevolveEl("h3", "Website Settings", "color:#183D32;"));
+
+    const crisisNode = document.querySelector(".wevolve-crisis-text");
+    const privacyNode = document.querySelector(".wevolve-privacy-text");
+
+    panel.appendChild(wevolveEl("label", "Safety notice (shown in the Safety section and in the member space). Put your local emergency and crisis numbers here."));
+    const crisisBox = wevolveEl("textarea", "", WEVOLVE_FIELD_CSS + "min-height:140px;");
+    crisisBox.maxLength = 3000;
+    crisisBox.value = crisisNode ? crisisNode.textContent : "";
+    panel.appendChild(crisisBox);
+
+    panel.appendChild(wevolveEl("label", "Privacy statement (shown in the Safety section and in the member space)."));
+    const privacyBox = wevolveEl("textarea", "", WEVOLVE_FIELD_CSS + "min-height:140px;");
+    privacyBox.maxLength = 3000;
+    privacyBox.value = privacyNode ? privacyNode.textContent : "";
+    panel.appendChild(privacyBox);
+
+    const status = wevolveEl("p", "");
+    status.setAttribute("aria-live", "polite");
+
+    panel.appendChild(wevolveMakeButton("Save settings", async function () {
+        const crisis = crisisBox.value.trim();
+        const privacy = privacyBox.value.trim();
+
+        if (!crisis || !privacy) {
+            status.textContent = "Neither text can be empty.";
+            return;
+        }
+
+        status.textContent = "Saving...";
+
+        const { error } = await wevolveSupabase.from("wevolve_settings").upsert([
+            { key: "crisis_notice", value: crisis, updated_at: new Date().toISOString() },
+            { key: "privacy_statement", value: privacy, updated_at: new Date().toISOString() }
+        ], { onConflict: "key" });
+
+        if (error) {
+            status.textContent = "Could not save: " + error.message;
+            return;
+        }
+
+        status.textContent = "Saved. The website now shows your new text.";
+        wevolveLoadSettings();
+    }));
+    panel.appendChild(status);
+}
+
 async function wevolveOwnerLogout() {
     document.getElementById("wevolve-admin-panel").textContent = "";
     await wevolveSupabase.auth.signOut();
@@ -1442,9 +2150,48 @@ document.getElementById("wevolve-member-message-form").addEventListener("submit"
 
 document.getElementById("wevolve-messages-btn").addEventListener("click", wevolveLoadInbox);
 
+document.getElementById("wevolve-members-btn").addEventListener("click", wevolveAdminMembers);
+document.getElementById("wevolve-reports-btn").addEventListener("click", wevolveAdminReports);
+document.getElementById("wevolve-library-btn").addEventListener("click", function () { wevolveAdminContent("library"); });
+document.getElementById("wevolve-announce-btn").addEventListener("click", function () { wevolveAdminContent("announcements"); });
+document.getElementById("wevolve-unspoken-btn").addEventListener("click", function () { wevolveAdminUnspoken("pending"); });
+document.getElementById("wevolve-settings-btn").addEventListener("click", wevolveAdminSettings);
+
+document.getElementById("wevolve-unspoken-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    wevolveSubmitUnspoken();
+});
+
+// Load the public content (settings, announcements, library, shared expressions).
+wevolveLoadSettings();
+wevolveLoadAnnouncements();
+wevolveLoadLibrary();
+wevolveLoadUnspokenPublic();
+
+document.getElementById("wevolve-forgot-link").addEventListener("click", function (event) {
+    event.preventDefault();
+    wevolveForgotPassword();
+});
+
+document.getElementById("wevolve-reset-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    wevolveSaveNewPassword();
+});
+
+// When a member opens the link from a password-reset email, show the "new password" box.
+wevolveSupabase.auth.onAuthStateChange(function (event) {
+    if (event === "PASSWORD_RECOVERY") {
+        wevolveShowResetBox();
+    }
+});
+
+if (wevolveRecoveryMode) {
+    wevolveShowResetBox();
+}
+
 // If a member is already logged in (from an earlier visit), show their space.
 wevolveSupabase.auth.getSession().then(function (result) {
-    if (result.data && result.data.session) {
+    if (result.data && result.data.session && !wevolveRecoveryMode) {
         wevolveShowMemberSpace(result.data.session.user);
     }
 });
