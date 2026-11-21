@@ -1,4 +1,3 @@
-index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,23 +5,7 @@ index.html
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WEVOLVE | The Mental Health Club</title>
 
-
-    .wevolve-logo {
-    position: absolute;
-    top: 20px;
-    left: 15px;
-    display: block;
-    margin: 0;
-    z-index: 10;
-}
-.wevolve-logo img {
-    width: 130px !important;
-    max-width: 22px !important;
-    height: 22px !important;
-    object-fit: contain;
-}
-
-}<style>
+<style>
     /* WEVOLVE OFFICIAL INTRODUCTION */
 
 .about-block,
@@ -251,6 +234,51 @@ footer p {
     margin-top: 15px;
 }
 
+/* ACCOUNT / ADMIN BOXES */
+.account-box {
+    max-width: 700px;
+    margin: 25px 0;
+    padding: 25px;
+    background: #F4F0E7;
+    border: 1px solid #D9CDBD;
+    border-radius: 12px;
+    line-height: 1.7;
+}
+
+.account-box input[type="email"],
+.account-box input[type="password"],
+.account-box input[type="text"],
+.account-box select {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 16px;
+    border: 1px solid #D9CDBD;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.account-box button {
+    background: #183D32;
+    color: #F4F0E7;
+    padding: 12px 22px;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 6px 6px 6px 0;
+    font-size: 14px;
+}
+
+.account-box button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.owner-dashboard-menu h3 {
+    color: #183D32;
+    margin: 20px 0 8px;
+}
+
 @media(max-width: 700px) {
     header {
         flex-wrap: wrap;
@@ -327,7 +355,7 @@ footer p {
     
 <div class="motto">
     <h2>OUR MOTTO</h2>
-    <p>WEVOLVE WE DON'T DISCRIMINATE WE RESPECT EVERYONE FOR BEING HUMAN AS WEVOLVE LISTENING TO EVERYONE NEEDS IS OUR PRIORITY</p>
+    <p>WEVOLVE: WE DON'T DISCRIMINATE. WE RESPECT EVERYONE FOR BEING HUMAN. AT WEVOLVE, LISTENING TO EVERYONE'S NEEDS IS OUR PRIORITY.</p>
 </div>
 
 
@@ -406,8 +434,6 @@ footer p {
 </section>
 
 
-    
-    
 <section class="sections" id="library">
   <div class="section-heading">
     <p class="eyebrow">KNOWLEDGE • UNDERSTANDING • GROWTH</p>
@@ -515,22 +541,40 @@ footer p {
     <h3>A space built on mutual respect</h3>
     <p>Connection should never be forced. Every interaction must be based on consent, dignity and personal choice.</p>
     <p><strong>Our principle:</strong> No pressure. No judgement. No violation of boundaries.</p>
-    <p style="font-size:13px;color:#666;">Private conversations, member accounts and anonymous matching are planned features. They are not active in this demonstration.</p>
+    <p style="font-size:13px;color:#666;">Private conversations and anonymous matching are planned features. They are not active yet.</p>
   </div>
 </section>
+
 <section class="philosophy" id="about">
-    
+    <div class="eyebrow">01 — OUR PHILOSOPHY</div>
+
+    <h2>Understanding begins where judgement ends.</h2>
+
+    <p>
+        WEVOLVE is an inclusive mental health community
+        created to encourage psychological awareness,
+        meaningful expression and deeper understanding
+        of ourselves and one another.
+    </p>
+
+    <p>
+        We believe every human experience deserves
+        dignity, curiosity and care.
+    </p>
+</section>
 
 <section class="sections" id="account">
-    <div id="owner-login" class="account-box">
-    <h2>WEVOLVE Administration</h2>
+
+<div id="owner-login" class="account-box">
+    <h2 style="font-size:28px;">WEVOLVE Administration</h2>
     <p>Private access for the authorised WEVOLVE administrator.</p>
 
-   <form onsubmit="event.preventDefault(); alert('Owner login button is responding'); wevolveOwnerLogin();">
+    <form id="wevolve-owner-form">
         <input
             type="email"
             id="wevolve-owner-email"
             placeholder="Owner email address"
+            autocomplete="username"
             required
         >
 
@@ -538,13 +582,35 @@ footer p {
             type="password"
             id="wevolve-owner-password"
             placeholder="Owner password"
+            autocomplete="current-password"
             required
         >
 
-        <button type="submit">Owner Login</button>
+        <button type="submit" id="wevolve-owner-submit">Owner Login</button>
     </form>
 
     <p id="wevolve-owner-message" aria-live="polite"></p>
+</div>
+
+<div id="wevolve-owner-dashboard" class="account-box" style="display: none;">
+    <h2 style="font-size:28px;">WEVOLVE Owner Dashboard</h2>
+    <p>Welcome to your private administration centre.</p>
+
+    <div class="owner-dashboard-menu">
+        <h3>Community Management</h3>
+        <button type="button">Member Management</button>
+        <button type="button">Community Reports</button>
+
+        <h3>Content Management</h3>
+        <button type="button">Manage Mind Library</button>
+        <button type="button">Publish Announcements</button>
+
+        <h3>Platform Management</h3>
+        <button type="button">Website Settings</button>
+        <button type="button">Community Overview</button>
+    </div>
+
+    <button type="button" id="wevolve-owner-logout">Log Out</button>
 </div>
 
     <h2>Member Access</h2>
@@ -636,7 +702,7 @@ footer p {
             <h3>Step 6 — Account Confirmation</h3>
             <p>Review your choices before entering your WEVOLVE space.</p>
             <div id="wevolve-review"></div>
-            <p><strong>Please note:</strong> This is currently a demonstration. Your choices are not being registered or saved to an account.</p>
+            <p><strong>Please note:</strong> After you create your account, we will send a confirmation email. Please confirm your email address before logging in.</p>
             <button type="button" onclick="wevolveBack(5)">Back</button>
             <button type="button" onclick="wevolveRegister()">Create My WEVOLVE Account</button>
         </div>
@@ -661,6 +727,38 @@ footer p {
                 <p><a href="#member-preferences">Member Preferences</a></p>
             </div>
 
+            <h4>Notification Preferences</h4>
+            <label>
+                <input type="checkbox" checked>
+                Community announcements
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" checked>
+                Contribution updates
+            </label>
+            <br>
+            <label>
+                <input type="checkbox">
+                Community connection updates
+            </label>
+
+            <h4>Community Interaction</h4>
+            <p>
+                Choose your level of participation. You may read,
+                contribute or connect at your own pace.
+            </p>
+
+            <h4>Accessibility</h4>
+            <p>
+                WEVOLVE aims to provide a clear, comfortable and
+                accessible experience for every member.
+            </p>
+
+            <p><strong>Demonstration only:</strong>
+            These preferences are not saved yet. A real account system
+            will be needed to remember your choices.</p>
+
             <p><strong>Your identity is yours to disclose.</strong></p>
             <p>Participate at your own pace. Respect others, respect yourself and remember that every human experience deserves to be understood.</p>
             <p><em>WEVOLVE — Feel. Express. Evolve.</em></p>
@@ -668,11 +766,106 @@ footer p {
 
     </div>
 
-    <p><strong>Demonstration only:</strong> This guided journey does not create accounts, authenticate members or save personal information. Secure registration and member-only access will require a backend.</p>
+    <p>Your identity is yours to disclose. WEVOLVE will never require you to reveal your real name to participate.</p>
 
 </section>
 
+<section class="sections" id="unspoken">
+    <div class="eyebrow">02 — EXPLORE WEVOLVE</div>
+
+    <h2>Different experiences. One human connection.</h2>
+
+     
+<div class="unspoken-experience" style="background:#f4f0e7;padding:30px;border-radius:16px;margin-top:25px;">
+  <h2 style="color:#183d32;">Your words have a place here.</h2>
+  <p style="color:#555;">Some experiences are difficult to explain. Some thoughts are difficult to say aloud. This is a space to express them without judgement.</p>
+
+  <h3 style="color:#183d32;">What would you like to express?</h3>
+
+  <form onsubmit="event.preventDefault(); alert('Thank you for expressing yourself. This is a demonstration: your words have not been sent or saved.');">
+    <label for="category">Choose a category</label>
+    <select id="category" required style="display:block;width:100%;padding:12px;margin:10px 0 20px;">
+      <option value="">Select a category</option>
+      <option>Emotional experiences</option>
+      <option>Personal struggles</option>
+      <option>Unspoken thoughts</option>
+      <option>Life experiences</option>
+      <option>Seeking understanding</option>
+    </select>
+
+    <label for="expression">Write what is on your mind</label>
+    <textarea id="expression" required maxlength="2000" placeholder="Express yourself freely..." style="display:block;width:100%;min-height:150px;padding:12px;margin:10px 0 20px;box-sizing:border-box;"></textarea>
+
+    <button type="submit" style="background:#183d32;color:white;padding:13px 24px;border:0;border-radius:6px;cursor:pointer;">Submit your expression</button>
+  </form>
+
+  <p style="font-size:13px;color:#666;margin-top:18px;">Privacy matters. This is currently a demonstration. Your submission is not stored, published or sent to anyone.</p>
+    
+<div style="margin-top:40px;border-top:1px solid #d9cdbd;padding-top:25px;">
+  <h2 style="color:#183d32;">Community Reflections</h2>
+  <p style="color:#555;">Different lives. Different experiences. One shared humanity.</p>
+
+  <div style="background:#fff;padding:22px;border-radius:12px;margin:20px 0;">
+    <h3 style="color:#183d32;">On feeling misunderstood</h3>
+    <p>"Sometimes, the hardest part is not what we feel, but finding the words to explain it."</p>
+    <small>WEVOLVE Reflection · Editorial example</small>
+  </div>
+
+  <div style="background:#fff;padding:22px;border-radius:12px;margin:20px 0;">
+    <h3 style="color:#183d32;">On personal growth</h3>
+    <p>"Healing is not always becoming someone new. Sometimes it is learning to understand the person you have always been."</p>
+    <small>WEVOLVE Reflection · Editorial example</small>
+  </div>
+
+  <div style="background:#fff;padding:22px;border-radius:12px;margin:20px 0;">
+    <h3 style="color:#183d32;">On being heard</h3>
+    <p>"Being listened to without judgement can remind someone that their experiences matter."</p>
+    <small>WEVOLVE Reflection · Editorial example</small>
+  </div>
+
+  <p style="font-size:13px;color:#666;">These are original editorial examples, not real member submissions. Community contributions will require moderation before publication.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="safety" id="safety">
+    <div class="eyebrow">03 — OUR COMMITMENT</div>
+
+    <h2>Your experience matters.</h2>
+
+    <p>
+        Mental health education and community support
+        can encourage understanding, but they do not
+        replace professional mental health treatment
+        or emergency services.
+    </p>
+</section>
+
+<footer>
+    <div class="logo" style="color:#F4F0E7">WEVOLVE.</div>
+    <p>Understanding the mind. Honouring the human experience.</p>
+    <p>© 2026 WEVOLVE — THE MENTAL HEALTH CLUB</p>
+</footer>
+
+<!-- 1. SUPABASE LIBRARY (must load first) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- 2. ALL WEVOLVE CODE IN ONE SCRIPT BLOCK -->
 <script>
+/* ---------- SUPABASE CONNECTION ---------- */
+const WEVOLVE_SUPABASE_URL = "https://atfspmftzamgxrprtitf.supabase.co";
+const WEVOLVE_SUPABASE_KEY = "sb_publishable_mRx5X9kjU0QCG-uZLn9Prw_IzoYJ_zp";
+
+const wevolveSupabase = window.supabase.createClient(
+    WEVOLVE_SUPABASE_URL,
+    WEVOLVE_SUPABASE_KEY
+);
+
+console.log("WEVOLVE Supabase connection initialized.");
+
+/* ---------- MEMBER JOURNEY ---------- */
 function wevolveNext(step) {
     if (step === 3 && !document.getElementById("wevolve-alias").value.trim()) {
         alert("Please choose an alias before continuing.");
@@ -768,165 +961,65 @@ function wevolveSafe(value) {
     element.textContent = value;
     return element.innerHTML;
 }
+
+/* ---------- OWNER / ADMINISTRATOR LOGIN ---------- */
+async function wevolveOwnerLogin() {
+    const email = document.getElementById("wevolve-owner-email").value.trim();
+    const password = document.getElementById("wevolve-owner-password").value;
+    const message = document.getElementById("wevolve-owner-message");
+    const submit = document.getElementById("wevolve-owner-submit");
+
+    message.textContent = "Checking your owner access...";
+    submit.disabled = true;
+
+    try {
+        const { error } = await wevolveSupabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            message.textContent = "Login failed: " + error.message;
+            return;
+        }
+
+        // The real permission check happens on the server (Supabase), not here.
+        const { data: isAdmin, error: adminError } =
+            await wevolveSupabase.rpc("is_wevolve_admin");
+
+        if (adminError || isAdmin !== true) {
+            await wevolveSupabase.auth.signOut();
+            message.textContent = "Access denied. Administrator permission required.";
+            return;
+        }
+
+        message.textContent = "";
+        document.getElementById("wevolve-owner-password").value = "";
+        document.getElementById("owner-login").style.display = "none";
+        document.getElementById("wevolve-owner-dashboard").style.display = "block";
+
+    } catch (err) {
+        message.textContent = "Connection problem: " + err.message;
+    } finally {
+        submit.disabled = false;
+    }
+}
+
+async function wevolveOwnerLogout() {
+    await wevolveSupabase.auth.signOut();
+
+    document.getElementById("wevolve-owner-dashboard").style.display = "none";
+    document.getElementById("owner-login").style.display = "block";
+    document.getElementById("wevolve-owner-message").textContent = "You have signed out.";
+}
+
+document.getElementById("wevolve-owner-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    wevolveOwnerLogin();
+});
+
+document.getElementById("wevolve-owner-logout").addEventListener("click", wevolveOwnerLogout);
 </script>
-
-
-    <h4>Notification Preferences</h4>
-    <label>
-        <input type="checkbox" checked>
-        Community announcements
-    </label>
-    <br>
-    <label>
-        <input type="checkbox" checked>
-        Contribution updates
-    </label>
-    <br>
-    <label>
-        <input type="checkbox">
-        Community connection updates
-    </label>
-
-    <h4>Community Interaction</h4>
-    <p>
-        Choose your level of participation. You may read,
-        contribute or connect at your own pace.
-    </p>
-
-    <h4>Accessibility</h4>
-    <p>
-        WEVOLVE aims to provide a clear, comfortable and
-        accessible experience for every member.
-    </p>
-
-    <p><strong>Demonstration only:</strong>
-    These preferences are not saved yet. A real account system
-    will be needed to remember your choices.</p>
-</div>
-
-
-        <p>
-            Your identity is yours to disclose. WEVOLVE will never
-            require you to reveal your real name to participate.
-        </p>
-
-        <p><strong>Demonstration only:</strong> This form does not
-        create an account or save information. Real registration
-        will require a secure system.</p>
-    </div>
-</section>
-
-    <div class="eyebrow">01 — OUR PHILOSOPHY</div>
-
-    <h2>Understanding begins where judgement ends.</h2>
-
-    <p>
-        WEVOLVE is an inclusive mental health community
-        created to encourage psychological awareness,
-        meaningful expression and deeper understanding
-        of ourselves and one another.
-    </p>
-
-    <p>
-        We believe every human experience deserves
-        dignity, curiosity and care.
-    </p>
-</section>
-
-<section class="sections" id="unspoken">
-    <div class="eyebrow">02 — EXPLORE WEVOLVE</div>
-
-    <h2>Different experiences. One human connection.</h2>
-
-     
-<div class="unspoken-experience" style="background:#f4f0e7;padding:30px;border-radius:16px;margin-top:25px;">
-  <h2 style="color:#183d32;">Your words have a place here.</h2>
-  <p style="color:#555;">Some experiences are difficult to explain. Some thoughts are difficult to say aloud. This is a space to express them without judgement.</p>
-
-  <h3 style="color:#183d32;">What would you like to express?</h3>
-
-  <form onsubmit="event.preventDefault(); alert('Thank you for expressing yourself. This is a demonstration: your words have not been sent or saved.');">
-    <label for="category">Choose a category</label>
-    <select id="category" required style="display:block;width:100%;padding:12px;margin:10px 0 20px;">
-      <option value="">Select a category</option>
-      <option>Emotional experiences</option>
-      <option>Personal struggles</option>
-      <option>Unspoken thoughts</option>
-      <option>Life experiences</option>
-      <option>Seeking understanding</option>
-    </select>
-
-    <label for="expression">Write what is on your mind</label>
-    <textarea id="expression" required maxlength="2000" placeholder="Express yourself freely..." style="display:block;width:100%;min-height:150px;padding:12px;margin:10px 0 20px;box-sizing:border-box;"></textarea>
-
-    <button type="submit" style="background:#183d32;color:white;padding:13px 24px;border:0;border-radius:6px;cursor:pointer;">Submit your expression</button>
-  </form>
-
-  <p style="font-size:13px;color:#666;margin-top:18px;">Privacy matters. This is currently a demonstration. Your submission is not stored, published or sent to anyone.</p>,
-    
-<div style="margin-top:40px;border-top:1px solid #d9cdbd;padding-top:25px;">
-  <h2 style="color:#183d32;">Community Reflections</h2>
-  <p style="color:#555;">Different lives. Different experiences. One shared humanity.</p>
-
-  <div style="background:#fff;padding:22px;border-radius:12px;margin:20px 0;">
-    <h3 style="color:#183d32;">On feeling misunderstood</h3>
-    <p>"Sometimes, the hardest part is not what we feel, but finding the words to explain it."</p>
-    <small>WEVOLVE Reflection · Editorial example</small>
-  </div>
-
-  <div style="background:#fff;padding:22px;border-radius:12px;margin:20px 0;">
-    <h3 style="color:#183d32;">On personal growth</h3>
-    <p>"Healing is not always becoming someone new. Sometimes it is learning to understand the person you have always been."</p>
-    <small>WEVOLVE Reflection · Editorial example</small>
-  </div>
-
-  <div style="background:#fff;padding:22px;border-radius:12px;margin:20px 0;">
-    <h3 style="color:#183d32;">On being heard</h3>
-    <p>"Being listened to without judgement can remind someone that their experiences matter."</p>
-    <small>WEVOLVE Reflection · Editorial example</small>
-  </div>
-
-  <p style="font-size:13px;color:#666;">These are original editorial examples, not real member submissions. Community contributions will require moderation before publication.</p>
-</div>
-
-</div>
-
-</section>
-
-<section class="safety" id="safety">
-    <div class="eyebrow">03 — OUR COMMITMENT</div>
-
-    <h2>Your experience matters.</h2>
-
-    <p>
-        Mental health education and community support
-        can encourage understanding, but they do not
-        replace professional mental health treatment
-        or emergency services.
-    </p>
-</section>
-
-<footer>
-    <div class="logo" style="color:#F4F0E7">WEVOLVE.</div>
-    <p>Understanding the mind. Honouring the human experience.</p>
-    <p>© 2026 WEVOLVE — THE MENTAL HEALTH CLUB</p>
-</footer>
-    
-<!-- WEVOLVE SUPABASE CONNECTION -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const WEVOLVE_SUPABASE_URL = "https://atfspmftzamgxrprtitf.supabase.co/rest/v1/";
-const WEVOLVE_SUPABASE_KEY = "sb_publishable_mRx5X9kjU0QCG-uZLn9Prw_IzoYJ_zp";
-
-const wevolveSupabase = window.supabase.createClient(
-    WEVOLVE_SUPABASE_URL,
-    WEVOLVE_SUPABASE_KEY
-);
-
-console.log("WEVOLVE Supabase connection initialized.");
-</script>
-
 
 </body>
 </html>
