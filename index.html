@@ -607,8 +607,10 @@ footer p {
 
         <h3>Platform Management</h3>
         <button type="button">Website Settings</button>
-        <button type="button">Community Overview</button>
+        <button type="button" id="wevolve-overview-btn">Community Overview</button>
     </div>
+
+    <div id="wevolve-admin-panel" aria-live="polite" style="margin-top:20px;"></div>
 
     <button type="button" id="wevolve-owner-logout">Log Out</button>
 </div>
@@ -1005,7 +1007,57 @@ async function wevolveOwnerLogin() {
     }
 }
 
+/* ---------- ADMIN: COMMUNITY OVERVIEW (counts only, checked on the server) ---------- */
+async function wevolveLoadOverview() {
+    const panel = document.getElementById("wevolve-admin-panel");
+    panel.textContent = "Loading community overview...";
+
+    try {
+        const { data, error } = await wevolveSupabase.rpc("wevolve_admin_overview");
+
+        if (error || !data) {
+            panel.textContent = "Could not load the overview. " + (error ? error.message : "");
+            return;
+        }
+
+        const rows = [
+            ["Total members", data.total_members],
+            ["Confirmed email addresses", data.confirmed_members],
+            ["New members in the last 7 days", data.new_7_days],
+            ["New members in the last 30 days", data.new_30_days]
+        ];
+
+        panel.textContent = "";
+
+        const heading = document.createElement("h3");
+        heading.textContent = "Community Overview";
+        heading.style.color = "#183D32";
+        panel.appendChild(heading);
+
+        rows.forEach(function (row) {
+            const line = document.createElement("p");
+            const label = document.createElement("span");
+            label.textContent = row[0] + ": ";
+            const value = document.createElement("strong");
+            value.textContent = String(row[1]);
+            line.appendChild(label);
+            line.appendChild(value);
+            panel.appendChild(line);
+        });
+
+        const note = document.createElement("p");
+        note.textContent = "Counts only. No member names or emails are shown here.";
+        note.style.fontSize = "13px";
+        note.style.color = "#666";
+        panel.appendChild(note);
+
+    } catch (err) {
+        panel.textContent = "Connection problem: " + err.message;
+    }
+}
+
 async function wevolveOwnerLogout() {
+    document.getElementById("wevolve-admin-panel").textContent = "";
     await wevolveSupabase.auth.signOut();
 
     document.getElementById("wevolve-owner-dashboard").style.display = "none";
@@ -1019,6 +1071,7 @@ document.getElementById("wevolve-owner-form").addEventListener("submit", functio
 });
 
 document.getElementById("wevolve-owner-logout").addEventListener("click", wevolveOwnerLogout);
+document.getElementById("wevolve-overview-btn").addEventListener("click", wevolveLoadOverview);
 </script>
 
 </body>
