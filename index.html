@@ -599,6 +599,7 @@ footer p {
     <div class="owner-dashboard-menu">
         <h3>Community Management</h3>
         <button type="button">Member Management</button>
+        <button type="button" id="wevolve-messages-btn">Member Messages</button>
         <button type="button">Community Reports</button>
 
         <h3>Content Management</h3>
@@ -617,6 +618,57 @@ footer p {
 
     <h2>Member Access</h2>
     <p>A place to connect, express yourself and grow without having to reveal more about yourself than you choose.</p>
+
+    <div id="member-login" class="account-box">
+        <h3>Already a member? Log in</h3>
+        <p>Use the email address and password you registered with.</p>
+
+        <form id="wevolve-member-form">
+            <input
+                type="email"
+                id="wevolve-member-email"
+                placeholder="Your email address"
+                autocomplete="username"
+                required
+            >
+
+            <input
+                type="password"
+                id="wevolve-member-password"
+                placeholder="Your password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit" id="wevolve-member-submit">Log In</button>
+        </form>
+
+        <p id="wevolve-member-message" aria-live="polite"></p>
+    </div>
+
+    <div id="member-space" class="account-box" style="display: none;">
+        <h3>Welcome back, <span id="wevolve-member-alias"></span></h3>
+        <p>This is your private WEVOLVE space. Your identity is yours to disclose.</p>
+
+        <h4 style="margin-top:20px;">Message the WEVOLVE team</h4>
+        <p style="font-size:14px;"><strong>Please note:</strong> WEVOLVE is not an emergency service and does not replace professional care. If you are in immediate danger or may harm yourself, contact your local emergency services or someone you trust right now.</p>
+
+        <div id="wevolve-member-thread" aria-live="polite"></div>
+
+        <form id="wevolve-member-message-form">
+            <textarea
+                id="wevolve-member-message-body"
+                maxlength="2000"
+                required
+                placeholder="Write your message. Only you and the WEVOLVE team can read it."
+                style="display:block;width:100%;min-height:110px;padding:12px;margin:10px 0 12px;border:1px solid #D9CDBD;border-radius:6px;font-size:15px;font-family:inherit;"
+            ></textarea>
+            <button type="submit" id="wevolve-member-send">Send privately</button>
+        </form>
+        <p id="wevolve-member-send-status" aria-live="polite"></p>
+
+        <button type="button" id="wevolve-member-logout">Log Out</button>
+    </div>
 
     <div class="account-box">
         <p><strong>YOUR WEVOLVE JOURNEY</strong></p>
@@ -964,6 +1016,161 @@ function wevolveSafe(value) {
     return element.innerHTML;
 }
 
+/* ---------- MEMBER LOGIN ---------- */
+function wevolveShowMemberSpace(user) {
+    const meta = user && user.user_metadata ? user.user_metadata : {};
+    document.getElementById("wevolve-member-alias").textContent = meta.alias || "member";
+    document.getElementById("member-login").style.display = "none";
+    document.getElementById("member-space").style.display = "block";
+    wevolveLoadMemberThread();
+}
+
+/* ---------- PRIVATE MESSAGES (shared helpers) ---------- */
+function wevolveRenderThread(container, rows, viewer, otherName) {
+    container.textContent = "";
+
+    if (!rows || !rows.length) {
+        const empty = document.createElement("p");
+        empty.textContent = "No messages yet.";
+        empty.style.color = "#666";
+        container.appendChild(empty);
+        return;
+    }
+
+    rows.forEach(function (row) {
+        const mine = viewer === "member" ? row.sender === "member" : row.sender === "admin";
+
+        const box = document.createElement("div");
+        box.style.background = mine ? "#E3EBDF" : "#fff";
+        box.style.padding = "12px 14px";
+        box.style.borderRadius = "10px";
+        box.style.margin = "10px 0";
+
+        const who = document.createElement("strong");
+        who.textContent = mine ? "You" : otherName;
+
+        const when = document.createElement("small");
+        when.textContent = "  " + new Date(row.created_at).toLocaleString();
+        when.style.color = "#666";
+
+        const text = document.createElement("p");
+        text.textContent = row.body;
+        text.style.whiteSpace = "pre-wrap";
+        text.style.margin = "6px 0 0";
+
+        box.appendChild(who);
+        box.appendChild(when);
+        box.appendChild(text);
+        container.appendChild(box);
+    });
+}
+
+/* ---------- PRIVATE MESSAGES (member side) ---------- */
+async function wevolveLoadMemberThread() {
+    const container = document.getElementById("wevolve-member-thread");
+    container.textContent = "Loading your messages...";
+
+    // The database only returns this member's own messages (Row Level Security).
+    const { data, error } = await wevolveSupabase
+        .from("wevolve_messages")
+        .select("sender, body, created_at")
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        container.textContent = "Could not load your messages: " + error.message;
+        return;
+    }
+
+    wevolveRenderThread(container, data, "member", "WEVOLVE team");
+}
+
+async function wevolveSendMemberMessage() {
+    const box = document.getElementById("wevolve-member-message-body");
+    const status = document.getElementById("wevolve-member-send-status");
+    const button = document.getElementById("wevolve-member-send");
+    const body = box.value.trim();
+
+    if (!body) {
+        return;
+    }
+
+    button.disabled = true;
+    status.textContent = "Sending...";
+
+    try {
+        const { data: userData, error: userError } = await wevolveSupabase.auth.getUser();
+
+        if (userError || !userData || !userData.user) {
+            status.textContent = "Please log in again to send a message.";
+            return;
+        }
+
+        const { error } = await wevolveSupabase
+            .from("wevolve_messages")
+            .insert({ member_id: userData.user.id, sender: "member", body: body });
+
+        if (error) {
+            status.textContent = "Message not sent: " + error.message;
+            return;
+        }
+
+        box.value = "";
+        status.textContent = "Your message has been sent privately to the WEVOLVE team.";
+        wevolveLoadMemberThread();
+
+    } catch (err) {
+        status.textContent = "Connection problem: " + err.message;
+    } finally {
+        button.disabled = false;
+    }
+}
+
+function wevolveResetMemberUI() {
+    document.getElementById("member-space").style.display = "none";
+    document.getElementById("member-login").style.display = "block";
+    document.getElementById("wevolve-member-password").value = "";
+}
+
+async function wevolveMemberLogin() {
+    const email = document.getElementById("wevolve-member-email").value.trim();
+    const password = document.getElementById("wevolve-member-password").value;
+    const message = document.getElementById("wevolve-member-message");
+    const submit = document.getElementById("wevolve-member-submit");
+
+    message.textContent = "Logging you in...";
+    submit.disabled = true;
+
+    try {
+        const { data, error } = await wevolveSupabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            if (error.message && error.message.toLowerCase().indexOf("not confirmed") !== -1) {
+                message.textContent = "Please confirm your email address first. Check your inbox for the confirmation link.";
+            } else {
+                message.textContent = "Login failed: " + error.message;
+            }
+            return;
+        }
+
+        message.textContent = "";
+        wevolveShowMemberSpace(data.user);
+
+    } catch (err) {
+        message.textContent = "Connection problem: " + err.message;
+    } finally {
+        submit.disabled = false;
+    }
+}
+
+async function wevolveMemberLogout() {
+    await wevolveSupabase.auth.signOut();
+    wevolveResetMemberUI();
+    document.getElementById("wevolve-member-message").textContent = "You have signed out.";
+}
+
 /* ---------- OWNER / ADMINISTRATOR LOGIN ---------- */
 async function wevolveOwnerLogin() {
     const email = document.getElementById("wevolve-owner-email").value.trim();
@@ -1056,9 +1263,123 @@ async function wevolveLoadOverview() {
     }
 }
 
+/* ---------- ADMIN: MEMBER MESSAGES (inbox and replies) ---------- */
+function wevolveMakeButton(label, handler) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = label;
+    button.addEventListener("click", handler);
+    return button;
+}
+
+async function wevolveLoadInbox() {
+    const panel = document.getElementById("wevolve-admin-panel");
+    panel.textContent = "Loading messages...";
+
+    const { data, error } = await wevolveSupabase.rpc("wevolve_admin_inbox");
+
+    if (error) {
+        panel.textContent = "Could not load messages: " + error.message;
+        return;
+    }
+
+    panel.textContent = "";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Member Messages";
+    heading.style.color = "#183D32";
+    panel.appendChild(heading);
+
+    if (!data || !data.length) {
+        const none = document.createElement("p");
+        none.textContent = "No messages from members yet.";
+        panel.appendChild(none);
+        return;
+    }
+
+    data.forEach(function (row) {
+        const unread = Number(row.unread) || 0;
+        const preview = String(row.last_message || "").slice(0, 80);
+        const label = row.alias + (unread ? " (" + unread + " new)" : "") + " - " + preview;
+
+        const wrapper = document.createElement("div");
+        wrapper.appendChild(wevolveMakeButton(label, function () {
+            wevolveOpenConversation(row.member_id, row.alias);
+        }));
+        panel.appendChild(wrapper);
+    });
+}
+
+async function wevolveOpenConversation(memberId, alias) {
+    const panel = document.getElementById("wevolve-admin-panel");
+    panel.textContent = "Loading conversation...";
+
+    const { data, error } = await wevolveSupabase
+        .from("wevolve_messages")
+        .select("sender, body, created_at")
+        .eq("member_id", memberId)
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        panel.textContent = "Could not load the conversation: " + error.message;
+        return;
+    }
+
+    panel.textContent = "";
+
+    panel.appendChild(wevolveMakeButton("Back to inbox", wevolveLoadInbox));
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Conversation with " + alias;
+    heading.style.color = "#183D32";
+    panel.appendChild(heading);
+
+    const thread = document.createElement("div");
+    wevolveRenderThread(thread, data, "admin", alias);
+    panel.appendChild(thread);
+
+    const reply = document.createElement("textarea");
+    reply.maxLength = 2000;
+    reply.placeholder = "Write your reply...";
+    reply.style.cssText = "display:block;width:100%;min-height:100px;padding:12px;margin:12px 0;border:1px solid #D9CDBD;border-radius:6px;font-size:15px;font-family:inherit;";
+    panel.appendChild(reply);
+
+    const status = document.createElement("p");
+    status.setAttribute("aria-live", "polite");
+
+    panel.appendChild(wevolveMakeButton("Send reply", async function () {
+        const body = reply.value.trim();
+        if (!body) {
+            return;
+        }
+
+        status.textContent = "Sending...";
+
+        const { error: sendError } = await wevolveSupabase
+            .from("wevolve_messages")
+            .insert({ member_id: memberId, sender: "admin", body: body });
+
+        if (sendError) {
+            status.textContent = "Reply not sent: " + sendError.message;
+            return;
+        }
+
+        wevolveOpenConversation(memberId, alias);
+    }));
+    panel.appendChild(status);
+
+    // Mark this member's messages as read (only an administrator is allowed to do this).
+    await wevolveSupabase
+        .from("wevolve_messages")
+        .update({ admin_read: true })
+        .eq("member_id", memberId)
+        .eq("sender", "member");
+}
+
 async function wevolveOwnerLogout() {
     document.getElementById("wevolve-admin-panel").textContent = "";
     await wevolveSupabase.auth.signOut();
+    wevolveResetMemberUI();
 
     document.getElementById("wevolve-owner-dashboard").style.display = "none";
     document.getElementById("owner-login").style.display = "block";
@@ -1072,6 +1393,27 @@ document.getElementById("wevolve-owner-form").addEventListener("submit", functio
 
 document.getElementById("wevolve-owner-logout").addEventListener("click", wevolveOwnerLogout);
 document.getElementById("wevolve-overview-btn").addEventListener("click", wevolveLoadOverview);
+
+document.getElementById("wevolve-member-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    wevolveMemberLogin();
+});
+
+document.getElementById("wevolve-member-logout").addEventListener("click", wevolveMemberLogout);
+
+document.getElementById("wevolve-member-message-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    wevolveSendMemberMessage();
+});
+
+document.getElementById("wevolve-messages-btn").addEventListener("click", wevolveLoadInbox);
+
+// If a member is already logged in (from an earlier visit), show their space.
+wevolveSupabase.auth.getSession().then(function (result) {
+    if (result.data && result.data.session) {
+        wevolveShowMemberSpace(result.data.session.user);
+    }
+});
 </script>
 
 </body>
