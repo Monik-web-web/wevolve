@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WEVOLVE | The Mental Health Club</title>
+<meta name="description" content="WEVOLVE is an inclusive mental health community where people can express themselves, connect, learn and grow without discrimination. Feel. Express. Evolve.">
+<meta name="theme-color" content="#183D32">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23183D32'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='38' text-anchor='middle' fill='%23F4F0E7'%3EW%3C/text%3E%3C/svg%3E">
 
 <style>
     /* WEVOLVE OFFICIAL INTRODUCTION */
@@ -279,6 +282,53 @@ footer p {
     margin: 20px 0 8px;
 }
 
+/* ACCESSIBILITY: visible keyboard focus and readable label colours */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #183D32;
+    outline-offset: 2px;
+}
+
+.hero a:focus-visible,
+footer a:focus-visible {
+    outline-color: #A8B9A3;
+}
+
+.sections .eyebrow,
+.philosophy .eyebrow,
+.safety .eyebrow {
+    color: #4F6B55;
+}
+
+.card small {
+    color: #5E705C;
+}
+
+footer a {
+    color: #D9CDBD;
+}
+
+.legal h3 {
+    font-family: Georgia, serif;
+    color: #183D32;
+    font-weight: normal;
+    font-size: 24px;
+    margin: 28px 0 10px;
+}
+
+.legal p,
+.legal li {
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+.legal ul {
+    margin-left: 22px;
+}
+
 @media(max-width: 700px) {
     header {
         flex-wrap: wrap;
@@ -326,6 +376,7 @@ footer p {
 <a href="#words">Words That Heal</a>
 <a href="#safety">Safety</a>
 <a href="#account">Member Access</a>
+<a href="#terms">Terms &amp; Privacy</a>
     </nav>
 </header>
 
@@ -775,7 +826,8 @@ footer p {
                 <li>Do not harass, threaten or manipulate others.</li>
                 <li>Remember that this community does not replace professional mental-health care.</li>
             </ul>
-            <label><input type="checkbox" id="wevolve-guidelines"> I have read and agree to follow the community guidelines.</label>
+            <p style="font-size:14px;">Everyone is welcome at WEVOLVE. If you are young, we encourage you to involve a trusted adult. Never share phone numbers, addresses or other contact details. Please read our <a href="#terms">Terms of Use and Privacy Policy</a>.</p>
+            <label><input type="checkbox" id="wevolve-guidelines"> I have read and agree to follow the community guidelines and the Terms of Use.</label>
             <br>
             <button type="button" onclick="wevolveBack(3)">Back</button>
             <button type="button" onclick="wevolveNext(5)">Continue</button>
@@ -819,43 +871,10 @@ footer p {
                 <p><a href="#connection">Connection Room</a></p>
                 <p><a href="#library">Mind Library</a></p>
                 <p><a href="#words">Words That Heal</a></p>
-                <p><a href="#notifications">Notifications</a></p>
-                <p><a href="#saved-resources">Saved Resources</a></p>
-                <p><a href="#member-activity">My Reflections and Activity</a></p>
-                <p><a href="#member-preferences">Member Preferences</a></p>
+                <p><a href="#safety">Safety and Privacy</a></p>
             </div>
 
-            <h4>Notification Preferences</h4>
-            <label>
-                <input type="checkbox" checked>
-                Community announcements
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" checked>
-                Contribution updates
-            </label>
-            <br>
-            <label>
-                <input type="checkbox">
-                Community connection updates
-            </label>
-
-            <h4>Community Interaction</h4>
-            <p>
-                Choose your level of participation. You may read,
-                contribute or connect at your own pace.
-            </p>
-
-            <h4>Accessibility</h4>
-            <p>
-                WEVOLVE aims to provide a clear, comfortable and
-                accessible experience for every member.
-            </p>
-
-            <p><strong>Demonstration only:</strong>
-            These preferences are not saved yet. A real account system
-            will be needed to remember your choices.</p>
+            <p>To log in next time, use the <strong>"Already a member? Log in"</strong> box at the top of Member Access. From there you can write privately to the WEVOLVE team and share in The Unspoken.</p>
 
             <p><strong>Your identity is yours to disclose.</strong></p>
             <p>Participate at your own pace. Respect others, respect yourself and remember that every human experience deserves to be understood.</p>
@@ -951,8 +970,56 @@ footer p {
     <p class="wevolve-privacy-text" style="white-space:pre-wrap;">Your messages to the WEVOLVE team are private: only you and the WEVOLVE administrator can read them. Your email address is never shown to other members. Expressions shared in The Unspoken appear without any name and only after the team has reviewed them. If you want to stay anonymous, please avoid sharing details that could identify you or other people.</p>
 </section>
 
+<section class="philosophy legal" id="terms">
+    <div class="eyebrow">04 — TERMS AND PRIVACY</div>
+    <h2>Terms of Use and Privacy Policy</h2>
+    <p>This page explains, in plain language, how WEVOLVE works and how we look after your information. By creating an account you agree to it.</p>
+
+    <h3>Who can join</h3>
+    <p>WEVOLVE welcomes everyone, because every person faces difficulties. If you are young, we encourage you to involve a parent, guardian or other trusted adult in how you use the community.</p>
+
+    <h3>Not an emergency service</h3>
+    <p>WEVOLVE offers education and community. It is not an emergency, medical or therapy service and does not replace professional care. If you are in immediate danger or may harm yourself, contact your local emergency services or someone you trust right now.</p>
+
+    <h3>Community rules</h3>
+    <ul>
+        <li>Respect every person. No discrimination, harassment, threats or manipulation.</li>
+        <li>Never pressure anyone to reveal who they are.</li>
+        <li>Never share phone numbers, home addresses or other contact details, yours or anyone else's.</li>
+        <li>Do not share anything that identifies another person without their consent.</li>
+        <li>Do not use WEVOLVE for advertising, scams or anything illegal.</li>
+    </ul>
+    <p>The WEVOLVE team may remove content, and may suspend or remove accounts, to keep members safe. Members can report an expression in The Unspoken using the Report button.</p>
+
+    <h3>What information we keep</h3>
+    <ul>
+        <li><strong>Your account:</strong> your email address, your alias, and the language, identity and privacy choices you made when joining.</li>
+        <li><strong>Your messages</strong> to the WEVOLVE team and the team's replies.</li>
+        <li><strong>Expressions</strong> you share in The Unspoken.</li>
+        <li><strong>Reports</strong> you file about content.</li>
+    </ul>
+    <p>We do not ask for your real name. We do not sell your information or use it for advertising.</p>
+
+    <h3>Who can see it</h3>
+    <ul>
+        <li>Your email address is never shown to other members.</li>
+        <li>Your private messages can be read only by you and the WEVOLVE administrator.</li>
+        <li>Expressions in The Unspoken are shown only after the team approves them, and never with your name or email.</li>
+        <li>Your information is stored with our technology provider, Supabase, and the website is hosted on GitHub Pages. They process data for us to run the service.</li>
+        <li>If someone appears to be in serious danger, the team may need to act to protect them.</li>
+    </ul>
+
+    <h3>Your choices</h3>
+    <p>You can ask us to delete your account and your information at any time. Log in and send a private message to the WEVOLVE team saying "Please delete my account", and the team will do so. You can also ask us what information we hold about you.</p>
+
+    <h3>Changes</h3>
+    <p>We may update these terms as WEVOLVE grows. The date of the latest update is shown below.</p>
+    <p><small>Last updated: 21 November 2026</small></p>
+</section>
+
 <footer>
     <div class="logo" style="color:#F4F0E7">WEVOLVE.</div>
+    <p><a href="#terms">Terms of Use and Privacy Policy</a> · <a href="#safety">Safety</a></p>
     <p>Understanding the mind. Honouring the human experience.</p>
     <p>© 2026 WEVOLVE — THE MENTAL HEALTH CLUB</p>
 </footer>
