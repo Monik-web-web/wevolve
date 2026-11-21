@@ -650,6 +650,8 @@ footer p {
         <h3>Welcome back, <span id="wevolve-member-alias"></span></h3>
         <p>This is your private WEVOLVE space. Your identity is yours to disclose.</p>
 
+        <div id="wevolve-member-notice" aria-live="polite"></div>
+
         <h4 style="margin-top:20px;">Message the WEVOLVE team</h4>
         <p style="font-size:14px;"><strong>Please note:</strong> WEVOLVE is not an emergency service and does not replace professional care. If you are in immediate danger or may harm yourself, contact your local emergency services or someone you trust right now.</p>
 
@@ -1053,6 +1055,14 @@ function wevolveRenderThread(container, rows, viewer, otherName) {
         when.textContent = "  " + new Date(row.created_at).toLocaleString();
         when.style.color = "#666";
 
+        // Show a "New" tag on replies the member has not seen yet.
+        if (viewer === "member" && !mine && row.member_read === false) {
+            const tag = document.createElement("span");
+            tag.textContent = " NEW";
+            tag.style.cssText = "background:#183D32;color:#F4F0E7;font-size:11px;letter-spacing:1px;padding:2px 7px;border-radius:10px;margin-left:8px;";
+            who.appendChild(tag);
+        }
+
         const text = document.createElement("p");
         text.textContent = row.body;
         text.style.whiteSpace = "pre-wrap";
@@ -1073,7 +1083,7 @@ async function wevolveLoadMemberThread() {
     // The database only returns this member's own messages (Row Level Security).
     const { data, error } = await wevolveSupabase
         .from("wevolve_messages")
-        .select("sender, body, created_at")
+        .select("sender, body, created_at, member_read")
         .order("created_at", { ascending: true });
 
     if (error) {
@@ -1082,6 +1092,30 @@ async function wevolveLoadMemberThread() {
     }
 
     wevolveRenderThread(container, data, "member", "WEVOLVE team");
+
+    // Notification banner for new replies from the team.
+    const notice = document.getElementById("wevolve-member-notice");
+    const unread = (data || []).filter(function (row) {
+        return row.sender === "admin" && row.member_read === false;
+    }).length;
+
+    notice.textContent = "";
+
+    if (unread > 0) {
+        notice.textContent = unread === 1
+            ? "You have 1 new reply from the WEVOLVE team."
+            : "You have " + unread + " new replies from the WEVOLVE team.";
+        notice.style.cssText = "background:#183D32;color:#F4F0E7;padding:14px 16px;border-radius:10px;margin:16px 0;font-weight:bold;";
+
+        // Mark the replies as seen. The labels on screen stay until the page is reloaded.
+        await wevolveSupabase
+            .from("wevolve_messages")
+            .update({ member_read: true })
+            .eq("sender", "admin")
+            .eq("member_read", false);
+    } else {
+        notice.style.cssText = "";
+    }
 }
 
 async function wevolveSendMemberMessage() {
